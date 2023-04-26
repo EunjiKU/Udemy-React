@@ -7,7 +7,7 @@ const ChartBar = props => {
 
   if(props.maxValue > 0) {
     // 🔹 Math.round : 숫자를 반올림 처리할 때
-    barFillHeight = Math.round((props.value / props.maxValue) * 100)
+    barFillHeight = Math.round((props.value / props.maxValue) * 100) + '%';
   }
 
   return <div className="chart-bar">
