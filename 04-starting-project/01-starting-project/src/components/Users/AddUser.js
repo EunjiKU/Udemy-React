@@ -15,7 +15,7 @@ const AddUser = props => {
       console.log("입력창이 비어져있습니다.");
       return;
     }
-    if(enteredAge < 1) {
+    if(+enteredAge < 1) {
       console.log("Age가 1보다 작습니다.");
       return;
     }
