@@ -8,7 +8,7 @@ const UserList = props => {
     <Card classes={classes.users}>
       <ul>
         {props.users.map((user) => (
-          <li>
+          <li key={user.id}>
             {user.name} ({user.age} years old)
           </li>
         ))}
@@ -17,4 +17,4 @@ const UserList = props => {
   );
 }
 
-export default UserList;
+export default UserList; 
