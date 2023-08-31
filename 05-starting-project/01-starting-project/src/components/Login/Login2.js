@@ -14,9 +14,17 @@ const Login = (props) => {
   // input 값 체인지
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
+
+    setFormIsValid(
+      event.target.value.includes("@") && enteredPassword.trim().length > 6
+    )
   }
   const passwordChangeHandler = (event) => {
-    setEnteredPassword(event.target.value)
+    setEnteredPassword(event.target.value);
+
+    setFormIsValid(
+      event.target.value.trim().length > 6 && enteredEmail.includes("@")
+    )
   }
 
   // input 값 blur
@@ -24,38 +32,40 @@ const Login = (props) => {
     setEmailIsValid(enteredEmail.includes('@'));
   }
   const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.includes('@'));
+    setPasswordIsValid(enteredPassword.trim().length > 6);
   }
 
   // Login 버튼 클릭시 아이디&비번 정보가 넘어감
   const submitHandler = (event) => {
     event.preventDefault();
-    console.log(enteredEmail, enteredPassword);
+    props.onLogin(enteredEmail, enteredPassword)
   }
 
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
-        <div className={`${classes.control}`}>
+        <div className={`${classes.control} ${emailIsValid === false ? classes.invalid : ""}`}>
           <label htmlFor="email">E-Mail</label>
           <input
             type="email"
             id="email"
+            value={enteredEmail}
             onChange={emailChangeHandler}
             onBlur={validateEmailHandler}
           />
         </div>
-        <div className={`${classes.control}`}>
+        <div className={`${classes.control} ${passwordIsValid === false ? classes.invalid : ""}`}>
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
+            value={enteredPassword}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
           />
         </div>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn}>Login</Button>
+          <Button type="submit" className={classes.btn} disabled={!formIsValid}>Login</Button>
         </div>
       </form>
     </Card>
