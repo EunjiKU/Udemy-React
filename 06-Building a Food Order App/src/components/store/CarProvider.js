@@ -1,5 +1,4 @@
 import { useReducer } from 'react';
-
 import CartContext from './cart-context';
 
 const defaultCartState = {
@@ -38,11 +37,9 @@ const cartReducer  = (state, action) => {
 
 const CarProvider = props => {
   const [cartState, dispatchCartAction] = useReducer(cartReducer, defaultCartState);
-
   const addItemToCartHandler = item => {
     dispatchCartAction({type: 'ADD', item: item});
   };
-
   const removeItemFromCartHandler = id => {
     dispatchCartAction({type: 'REMOVE', item: id});
   };
