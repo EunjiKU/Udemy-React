@@ -9,12 +9,12 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // async function fetchMoviesHandler() {
   const fetchMoviesHandler = useCallback (async() => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('https://swapi.dev/api/films/');
+      // const response = await fetch('https://swapi.dev/api/films/');
+      const response = await fetch('https://react-http-2dab4-default-rtdb.firebaseio.com/movies.json');
       if(!response.ok) {
         throw new Error('Someting went wrong!!!');
       }
@@ -58,9 +58,9 @@ function App() {
       <section>
         <AddMovie onAddMovie={addMovieHandler} />
       </section>
-      <section>
+      {/* <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
-      </section>
+      </section> */}
       <section>{content}</section>
     </React.Fragment>
   );
