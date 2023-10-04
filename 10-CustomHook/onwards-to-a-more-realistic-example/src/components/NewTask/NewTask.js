@@ -20,8 +20,8 @@ const NewTask = (props) => {
         headers: {'Content-Type': 'application/json'},
         body: { text: taskText }
       },
-      // 첫번째 인자 : 실행이 예정된 함수에서 this 예약어를 사용
-      // 두번째 인자 : 호출 예정인 함수가 받는 첫번째 인자
+      // ✅첫번째 인자 : 실행이 예정된 함수에서 this 예약어를 사용
+      // ✅두번째 인자 : 호출 예정인 함수가 받는 첫번째 인자
       createTask.bind(null, taskText)
     );
   };
