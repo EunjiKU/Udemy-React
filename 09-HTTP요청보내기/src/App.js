@@ -13,21 +13,25 @@ function App() {
     setIsLoading(true);
     setError(null);
     try {
-      // const response = await fetch('https://swapi.dev/api/films/');
       const response = await fetch('https://react-http-2dab4-default-rtdb.firebaseio.com/movies.json');
       if(!response.ok) {
         throw new Error('Someting went wrong!!!');
       }
       const data = await response.json();
-      const transformedMovies = data.results.map((movideData) => {
-        return {
-          id: movideData.episode_id,
-          title: movideData.title,
-          releaseDate: movideData.release_date,
-          openingText: movideData.opening_crawl
-        }
-      })
-      setMovies(transformedMovies);
+      console.log(data);
+
+      const loadedMovies = [];
+      
+      for(const key in data) {
+        loadedMovies.push({
+          id: key,
+          title: data[key].title,
+          releaseDate: data[key].releaseDate,
+          openingText: data[key].openingText,
+        })
+      }
+      console.log(loadedMovies);
+      setMovies(loadedMovies);
     } catch(error) {
       setError(error.message);
     }
@@ -38,8 +42,20 @@ function App() {
     fetchMoviesHandler();
   }, [fetchMoviesHandler]);
 
-  function addMovieHandler(movie) {
+  async function addMovieHandler(movie) {
     console.log(movie);
+    const response = await fetch('https://react-http-2dab4-default-rtdb.firebaseio.com/movies.json', {
+      // method: 'GET'
+      method: 'POST',
+      body: JSON.stringify(movie),
+      // 어떤 컨텐츠를 전달하는지 알 수 있다
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const data = await response.json();
+    console.log(data);
+    console.log(response);
   }
 
   let content = <p>Found no movies.</p>;
