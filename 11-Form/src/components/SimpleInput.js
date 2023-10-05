@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import useInput from '../hooks/use-input';
 
 const SimpleInput = (props) => {
@@ -11,28 +10,21 @@ const SimpleInput = (props) => {
     reset: resetNameInput
   } = useInput(value => value.trim() !== '');
 
-  const [enterdEmail, setEnterdEmail] = useState('');
-  const [enteredEmailTouched, setEnteredEmailTouched] = useState(false);
-
-  const enteredEmailIsValid = enterdEmail.includes('@'); // includes : 특정 문자열을 포함하는지 확인
-  const emailInputIsValid = !enteredEmailIsValid && enteredEmailTouched;
+  const {
+    value: enterdEmail,
+    isValid: enteredEmailIsValid,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangeHandler,
+    valueBlurHandler: emailBlurHandler,
+    reset: resetEmailInput
+  } = useInput(value => value.includes('@'));
 
   let formIsValid = false;
 
-    if(enteredNameIsValid && enteredEmailIsValid) {
-      formIsValid = true;
-    }
-
-  // ✅ 인풋 값 입력할 때마다
-  const emailInputChangeHandler = event => {
-    setEnterdEmail(event.target.value);
+  if(enteredNameIsValid && enteredEmailIsValid) {
+    formIsValid = true;
   }
-
-  // ✅ 인풋에서 포커스 잃었을 때
-  const emailInputBlurHandler = event => {
-    setEnteredEmailTouched(true);
-  }
-
+    
   // ✅ Submit 버튼 클릭
   const formSubmissionHandler = event => {
     event.preventDefault();
@@ -43,15 +35,12 @@ const SimpleInput = (props) => {
 
     console.log("useState : " + enterdName);
     resetNameInput();
-    // setEnterdName('');
-    // setEnteredNameTouched(false);
     console.log("useState : " + enterdEmail);
-    setEnterdEmail('');
-    setEnteredEmailTouched(false);
+    resetEmailInput();
   }
 
   const nameInputClasses = nameInputHasError ? 'form-control invalid' : 'form-control';
-  const emailInputClasses = emailInputIsValid ? 'form-control invalid' : 'form-control';
+  const emailInputClasses = emailInputHasError ? 'form-control invalid' : 'form-control';
 
   return (
     <form onSubmit={formSubmissionHandler}>
@@ -64,9 +53,9 @@ const SimpleInput = (props) => {
       <div className={emailInputClasses}>
         <label htmlFor='email'>Your E-mail</label>
         <input value={enterdEmail} type='email' id='email'
-          onChange={emailInputChangeHandler} onBlur={emailInputBlurHandler} />
+          onChange={emailChangeHandler} onBlur={emailBlurHandler} />
       </div>
-      {emailInputIsValid && <p className='error-text'>Please enter a valid email.</p>}
+      {emailInputHasError && <p className='error-text'>Please enter a valid email.</p>}
       <div className="form-actions">
         <button disabled={!formIsValid}>Submit</button>
       </div>
