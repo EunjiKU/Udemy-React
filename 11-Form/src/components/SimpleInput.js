@@ -1,42 +1,47 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const SimpleInput = (props) => {
-  const nameInputRef = useRef();
   const [enterdName, setEnterdName] = useState('');
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(true);
+  const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
+  const enteredNameIsValid = enterdName.trim() !== '';
+  const nameInputIsValid = !enteredNameIsValid && enteredNameTouched;
+
+  // ✅ 인풋 값 입력할 때마다
   const nameInputChangeHandler = event => {
     setEnterdName(event.target.value);
   }
 
+  // ✅ 인풋에서 포커스 잃었을 때
+  const nameInputBlurHandler = event => {
+    setEnteredNameTouched(true);
+  }
+
+  // ✅ Submit 버튼 클릭
   const formSubmissionHandler = event => {
     event.preventDefault();
 
-    if(enterdName === '') {
-      setEnteredNameIsValid(false);
+    setEnteredNameTouched(true);
+
+    if(!enteredNameIsValid) {
       return;
     }
 
-    setEnteredNameIsValid(true);
-
     console.log("useState : " + enterdName);
-
-    const enteredValue = nameInputRef.current.value;
-    console.log("useRef : " + enteredValue);
-
-    // nameInputRef.current.value = ''; => ❌
     setEnterdName('');
+    setEnteredNameTouched(false);
   }
 
-  const nameInputClasses = enteredNameIsValid ? 'form-control' : 'form-control invalid';
+  const nameInputClasses = nameInputIsValid ? 'form-control invalid' : 'form-control';
 
   return (
     <form onSubmit={formSubmissionHandler}>
       <div className={nameInputClasses}>
         <label htmlFor='name'>Your Name</label>
-        <input ref={nameInputRef} value={enterdName} type='text' id='name' onChange={nameInputChangeHandler} />
+        <input value={enterdName} type='text' id='name'
+          onChange={nameInputChangeHandler} onBlur={nameInputBlurHandler} />
       </div>
-      {!enteredNameIsValid && <p className='error-text'>Name must not be empty.</p>}
+      {nameInputIsValid && <p className='error-text'>Name must not be empty.</p>}
       <div className="form-actions">
         <button>Submit</button>
       </div>
