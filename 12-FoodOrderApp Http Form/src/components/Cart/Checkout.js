@@ -1,7 +1,18 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import classes from './Checkout.module.css';
 
+// ✅ 값이 비어있거나 && 5자 미만일 경우,,,
+const isEmpty = value => value.trim() === '';
+const isNotFiveChars = value => value.trim().length !== 5;
+
 const Checkout = (props) => {
+  const [formInputValidity, setFormInputValidity] = useState({
+    name: true,
+    street: true,
+    postalCode: true,
+    city: true
+  });
+
   const nameInputRef = useRef();
   const streetInputRef = useRef();
   const postalInputRef = useRef();
@@ -14,6 +25,29 @@ const Checkout = (props) => {
     const enterdStreet = streetInputRef.current.value;
     const enterdPostal = postalInputRef.current.value;
     const enterdCity = cityInputRef.current.value;
+
+    // ✅ 값이 있으면 !false => true 반환
+    const enteredNameIsValid = !isEmpty(enterdName);
+    const enteredStreetIsValid = !isEmpty(enterdStreet);
+    const enteredPostalIsValid = !isNotFiveChars(enterdPostal);
+    const enteredCityIsValid = !isEmpty(enterdCity);
+
+    setFormInputValidity({
+      name: enteredNameIsValid,
+      street: enteredStreetIsValid,
+      postalCode: enteredPostalIsValid,
+      city: enteredCityIsValid
+    })
+
+    const formIsValid = enteredNameIsValid && enteredStreetIsValid && enteredPostalIsValid && enteredCityIsValid;
+
+    // ⭐ 값이 유효하지않다면...
+    if(!formIsValid) {
+      return;
+    }
+
+    // ⭐ 값이 유효하다면...
+
   };
 
   return (
@@ -21,6 +55,7 @@ const Checkout = (props) => {
       <div className={classes.control}>
         <label htmlFor='name'>Your Name</label>
         <input type='text' id='name' ref={nameInputRef} />
+        {!formInputValidity.name && <p>Please enter a valid name!</p>}
       </div>
       <div className={classes.control}>
         <label htmlFor='street'>Street</label>
