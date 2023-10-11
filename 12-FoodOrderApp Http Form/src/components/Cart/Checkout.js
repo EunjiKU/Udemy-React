@@ -47,10 +47,6 @@ const Checkout = (props) => {
     }
 
     // ⭐ 값이 유효하다면...
-    console.log(enterdName);
-    console.log(enterdStreet);
-    console.log(enterdPostal);
-    console.log(enterdCity);
     props.onConfirm({
       name: enterdName,
       street: enterdStreet,
