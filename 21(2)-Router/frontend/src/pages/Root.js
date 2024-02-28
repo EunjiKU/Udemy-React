@@ -1,11 +1,18 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router-dom";
 import MainNavigation from "../components/MainNavigation";
 
 const Root = () => {
+  const navigation = useNavigation();
+
+  // navigation.state === 'idle'
+  // navigation.state === 'loading'
+  // navigation.state === 'submitting'
+
   return (
     <>
       <MainNavigation />
       <main>
+        { navigation.state === 'loading' && <p>Loading...</p>}
         <Outlet />
       </main>
     </>

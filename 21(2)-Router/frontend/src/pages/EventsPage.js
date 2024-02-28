@@ -26,7 +26,11 @@ const EventsPage = () => {
   //   fetchEvents();
   // }, []);
 
-  const events = useLoaderData();
+  const data = useLoaderData();
+  if(data.isError) {
+    return <p>{data.message}</p>
+  }
+  const events = data.events;
 
   return (
     <>
@@ -47,8 +51,15 @@ export async function loader() {
   const response = await fetch('http://localhost:8080/events');
 
   if (!response.ok) {
+    // return { isError: true, message: 'Could not fetch events.' };
+    // throw { message: 'Could not fetch events.' }
+    throw new Response(JSON.stringify({ message: 'Could not fetch events.' }), {
+      status: 500,
+    });
+    // 500 : HTTP 상태 코드로 서버에서 문제가 발생하였으나 문제의 구체적인 내용을 표시할 수 없음을 의미
   } else {
-    const resData = await response.json();
-    return resData.events;
+    // const resData = await response.json();
+    console.log(response);
+    return response;
   }
 }
